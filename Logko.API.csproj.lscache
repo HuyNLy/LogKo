@@ -56,13 +56,27 @@ TemporaryDependencyNodeTargetIdentifier=net10.0
 
 [sourceFiles]
 Controllers/AuthController.cs
-Data/AppDbContext.cs
+Data/
+ AppDbContext.cs
+ IUserRepo.cs
+ UserRepo.cs
+DTOs/Auth/
+ LoginRequest.cs
+ LoginResponse.cs
+ RegisterRequest.cs
+Migrations/
+ 20260603075448_InitialCreate.cs
+ 20260603075448_InitialCreate.Designer.cs
+ AppDbContextModelSnapshot.cs
 Models/User.cs
 obj/Debug/net10.0/
  .NETCoreApp,Version=v10.0.AssemblyAttributes.cs
  Logko.API.AssemblyInfo.cs
  Logko.API.GlobalUsings.g.cs
 Program.cs
+Services/
+ AuthService.cs
+ IAuthService.cs
 
 [metadataReferences]
 <DOTNET>/packs/Microsoft.AspNetCore.App.Ref/10.0.5/ref/net10.0/
@@ -379,7 +393,7 @@ Program.cs
  azure.identity/1.14.2/lib/net8.0/Azure.Identity.dll
  bcrypt.net-next/4.2.0/lib/net10.0/BCrypt-Net-Next.dll
  microsoft.aspnetcore.authentication.jwtbearer/10.0.8/lib/net10.0/Microsoft.AspNetCore.Authentication.JwtBearer.dll
- microsoft.aspnetcore.openapi/10.0.5/lib/net10.0/Microsoft.AspNetCore.OpenApi.dll
+ microsoft.aspnetcore.openapi/10.0.8/lib/net10.0/Microsoft.AspNetCore.OpenApi.dll
  microsoft.bcl.asyncinterfaces/8.0.0/lib/netstandard2.1/Microsoft.Bcl.AsyncInterfaces.dll
  microsoft.bcl.cryptography/9.0.4/lib/net9.0/Microsoft.Bcl.Cryptography.dll
  microsoft.data.sqlclient/6.1.1/ref/net9.0/Microsoft.Data.SqlClient.dll
@@ -436,8 +450,8 @@ Program.cs
  Microsoft.CodeAnalysis.CSharp.NetAnalyzers.dll
  Microsoft.CodeAnalysis.NetAnalyzers.dll
 <NUGET>/
- microsoft.aspnetcore.openapi/10.0.5/analyzers/dotnet/cs/Microsoft.AspNetCore.OpenApi.SourceGenerators.dll
- microsoft.codeanalysis.analyzers/3.3.3/analyzers/dotnet/cs/
+ microsoft.aspnetcore.openapi/10.0.8/analyzers/dotnet/cs/Microsoft.AspNetCore.OpenApi.SourceGenerators.dll
+ microsoft.codeanalysis.analyzers/3.11.0/analyzers/dotnet/cs/
   Microsoft.CodeAnalysis.Analyzers.dll
   Microsoft.CodeAnalysis.CSharp.Analyzers.dll
  microsoft.entityframeworkcore.analyzers/10.0.8/analyzers/dotnet/cs/Microsoft.EntityFrameworkCore.Analyzers.dll
