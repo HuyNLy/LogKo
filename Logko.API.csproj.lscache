@@ -59,6 +59,7 @@ Controllers/AuthController.cs
 Data/
  AppDbContext.cs
  IUserRepo.cs
+ RefreshTokenRequest.cs
  UserRepo.cs
 DTOs/Auth/
  LoginRequest.cs
@@ -67,6 +68,8 @@ DTOs/Auth/
 Migrations/
  20260603075448_InitialCreate.cs
  20260603075448_InitialCreate.Designer.cs
+ 20260604070948_AddRefreshTokenToUser.cs
+ 20260604070948_AddRefreshTokenToUser.Designer.cs
  AppDbContextModelSnapshot.cs
 Models/User.cs
 obj/Debug/net10.0/

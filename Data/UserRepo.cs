@@ -28,6 +28,17 @@ public class UserRepo : IUserRepo
         return await _context.Users.FirstOrDefaultAsync(u => u.Username == username);
     }
 
+    public async Task UpdateUserAsync(User user)
+    {
+        _context.Users.Update(user);
+        await _context.SaveChangesAsync();
+    }
+
+    public async Task<User?> GetUserByRefreshTokenAsync(string refreshToken)
+    {
+        return await _context.Users.FirstOrDefaultAsync(u => u.RefreshToken == refreshToken);
+    }
+
     public async Task<bool> UserExistsAsync(string username)
     {
         return await _context.Users.AnyAsync(u => u.Username == username);

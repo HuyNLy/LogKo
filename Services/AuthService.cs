@@ -32,7 +32,7 @@ public class AuthService: IAuthService
             throw new UnauthorizedAccessException("Invalid username or password.");
         }
 
-        return BuildToken(user);
+        return await BuildToken(user);
 
     }
     public async Task Register(RegisterRequest request)
@@ -60,7 +60,7 @@ public class AuthService: IAuthService
         });
     }
 
-    private LoginResponse BuildToken(User user)
+    private async Task<LoginResponse> BuildToken(User user)
     {
         Claim[] claims = new[]
         {
@@ -89,14 +89,35 @@ public class AuthService: IAuthService
         );
 
         string serialized = new JwtSecurityTokenHandler().WriteToken(token);
+        var refreshToken = Convert.ToBase64String(
+                System.Security.Cryptography.RandomNumberGenerator.GetBytes(64));
+
+        user.RefreshToken = refreshToken;
+        user.RefreshTokenExpiry = DateTime.UtcNow.AddDays(
+            int.Parse(_configuration["JwtSettings:RefreshTokenExpiryDays"]!));
+        await _userRepo.UpdateUserAsync(user);
 
         return new LoginResponse
         {
             AccessToken  = serialized,
             Role         = user.Role.ToString(),
             ExpiresAt    = expires,
-            RefreshToken = "TODO"
+            RefreshToken = refreshToken
         };
+    }
+
+    public async Task<LoginResponse> RefreshToken(string refreshToken)
+    {
+        var user = await _userRepo.GetUserByRefreshTokenAsync(refreshToken);
+
+        if (user == null || 
+            user.RefreshToken != refreshToken || 
+            user.RefreshTokenExpiry < DateTime.UtcNow)
+        {
+            throw new UnauthorizedAccessException("Invalid or expired refresh token.");
+        }
+
+        return await BuildToken(user);
     }
 
 }

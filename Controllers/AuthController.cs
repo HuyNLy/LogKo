@@ -1,7 +1,12 @@
 using Microsoft.AspNetCore.Mvc;
 using Logko.API.Services;
 using Logko.API.DTOs.Auth;
+using Logko.API.Data;
+using Microsoft.AspNetCore.Authorization;
 namespace Logko.API.Controllers;
+
+
+
 
 
 [ApiController]
@@ -33,5 +38,33 @@ public class AuthController : ControllerBase
     public IActionResult Test()
     {
         return Ok("Auth controller is working!");
+    }
+
+    [Authorize]
+    [HttpGet("protected")]
+    public IActionResult Protected()
+    {
+        return Ok("You are authenticated!");
+    }
+
+    [Authorize(Roles = "Admin")]
+    [HttpGet("admin-only")]
+    public IActionResult AdminOnly()
+    {
+        return Ok("You are an Admin!");
+    }
+
+    [Authorize(Roles = "User")]
+    [HttpGet("user-only")]
+    public IActionResult UserOnly()
+    {
+        return Ok("You are a User!");
+    }
+
+    [HttpPost("refresh")]
+    public async Task<IActionResult> Refresh([FromBody] RefreshTokenRequest request)
+    {
+        var response = await _authService.RefreshToken(request.RefreshToken);
+        return Ok(response);
     }
 }
