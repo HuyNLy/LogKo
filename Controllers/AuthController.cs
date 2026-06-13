@@ -3,6 +3,8 @@ using Logko.API.Services;
 using Logko.API.DTOs.Auth;
 using Logko.API.Data;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.RateLimiting;
+
 namespace Logko.API.Controllers;
 
 
@@ -27,6 +29,7 @@ public class AuthController : ControllerBase
         return StatusCode(201, new { message = "User registered successfully." });    }
 
     [HttpPost("login")]
+    [EnableRateLimiting("login")]
     public async Task<IActionResult> Login([FromBody] LoginRequest request)
     {
         var response = await _authService.Login(request);

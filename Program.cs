@@ -5,6 +5,8 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using System.Text;
 using Microsoft.OpenApi;
+using Microsoft.AspNetCore.RateLimiting;
+using Logko.API.Middleware;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -31,6 +33,18 @@ builder.Services.AddSwaggerGen(options =>
 });
 builder.Services.AddScoped<IUserRepo, UserRepo>();
 builder.Services.AddScoped<IAuthService, AuthService>();
+
+//Limit rates to prevent brute-force attacks
+builder.Services.AddRateLimiter(options =>
+{
+    options.AddFixedWindowLimiter("login", config =>
+    {
+        config.PermitLimit = 5  ;      // max attempts
+        config.Window = TimeSpan.FromMinutes(15);             // time window
+        config.QueueLimit = 0;         // no queue
+    });
+    options.RejectionStatusCode = 429;
+});
 
 // ── Database ───────────────────────────────────────────────
 builder.Services.AddDbContext<AppDbContext>(options =>
@@ -71,6 +85,8 @@ if (app.Environment.IsDevelopment())
 }
 
 // ── Middleware Pipeline ────────────────────────────────────
+app.UseMiddleware<GlobalExceptionMiddleware>();
+app.UseRateLimiter();
 app.UseHttpsRedirection();
 app.UseAuthentication();
 app.UseAuthorization();
